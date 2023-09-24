@@ -1,16 +1,16 @@
 Framework grant simple access to PaloAlto devices Rest API and Xml API via Python objects.
 
-Device config template:
+Device/Panorama config template:
+ApiKey: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+    or
 Login: admin
 Password: password
+
 ApiVersion: 10.0
 RequestsDelaySeconds: 1
 
-Panorama config template:
-ApiKey: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
-ApiVersion: 10.1
-IPv4: 10.10.10.10
-RequestsDelaySeconds: 1
+You also can create a dict with keys defined abowe and pass in into config_file_full_name on device __init__()
+
 
 Code examples:
 Create an addresses and address group:
