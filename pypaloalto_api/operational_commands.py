@@ -26,7 +26,7 @@ class ContentType(Enum):
     content = 'content'
 
 
-class Builder:
+class OPCmdBuilder:
     @staticmethod
     def request_batch_info(content_type: ContentType) -> str:
         """Panorama only!
@@ -250,7 +250,7 @@ class Builder:
 
     @staticmethod
     def request_batch_upload_install_file(content_type: ContentType, file_name: str, device_serial: str,
-                                          is_uploaded_file=False):
+                                          is_uploaded_file=False) -> str:
         """Panorama only!"""
         file_tag = 'uploaded-file' if is_uploaded_file else 'file'
 
@@ -259,7 +259,7 @@ class Builder:
 
     @staticmethod
     def request_batch_content_upload_install_file(file_name: str, device_serial: str,
-                                                  skip_content_validity_check=False, is_uploaded_file=False):
+                                                  skip_content_validity_check=False, is_uploaded_file=False) -> str:
         """Panorama only!"""
         file_tag = 'uploaded-file' if is_uploaded_file else 'file'
         content_validity_check_tag = '' if skip_content_validity_check else '<skip-content-validity-check>yes</skip-content-validity-check>'
@@ -269,7 +269,7 @@ class Builder:
                f'</upload-install></{ContentType.content.value}></batch></request>'
 
     @staticmethod
-    def show_jobs(job_id=None):
+    def show_jobs(job_id=None) -> str:
         """
 <result>
     <job>
@@ -314,7 +314,7 @@ class Builder:
             return '<show><jobs><all></all></jobs></show>'
 
     @staticmethod
-    def show_ha_state():
+    def show_ha_state() -> str:
         """
 <result>
     <enabled>yes</enabled>
@@ -380,7 +380,11 @@ class Builder:
         return '<show><high-availability><state></state></high-availability></show>'
 
     @staticmethod
-    def show_system_info():
+    def set_user_id_data() -> str:
+        return '<set><user-id><data></data></user-id></set>'
+
+    @staticmethod
+    def show_system_info() -> str:
         """
 <result>
     <system>
@@ -423,7 +427,7 @@ class Builder:
         return '<show><system><info></info></system></show>'
 
     @staticmethod
-    def show_dg_hierarchy():
+    def show_dg_hierarchy() -> str:
         """
 <result>
     <dg-hierarchy>

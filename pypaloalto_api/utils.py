@@ -1,8 +1,10 @@
-import logging
+import copy
 import os
 from functools import wraps
 from requests.auth import AuthBase
 import datetime
+
+from pypaloalto_api import logger
 
 
 class ApiKeyAuth(AuthBase):
@@ -92,9 +94,43 @@ def deprecated(new_func_name: str):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            logging.warning(f'Function {str(func)} is deprecated! Use {str(new_func_name)} instead.')
+            logger.warning(f'Function {str(func)} is deprecated! Use {str(new_func_name)} instead.')
             return func(*args, **kwargs)
 
         return wrapper
 
     return decorator
+
+
+_deepcopy_dispatcher = {}
+
+
+def _copy_list(l: list, dispatch):
+    ret = l.copy()
+    for idx, item in enumerate(ret):
+        cp = dispatch.get(type(item))
+        if cp is not None:
+            ret[idx] = cp(item, dispatch)
+    return ret
+
+
+def _copy_dict(d: dict, dispatch):
+    ret = d.copy()
+    for key, value in ret.items():
+        cp = dispatch.get(type(value))
+        if cp is not None:
+            ret[key] = cp(value, dispatch)
+
+    return ret
+
+
+_deepcopy_dispatcher[list] = _copy_list
+_deepcopy_dispatcher[dict] = _copy_dict
+
+
+def custom_deepcopy(sth):
+    cp = _deepcopy_dispatcher.get(type(sth))
+    if cp is None:
+        return copy.deepcopy(sth)
+    else:
+        return cp(sth, _deepcopy_dispatcher)

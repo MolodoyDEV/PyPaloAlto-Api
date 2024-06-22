@@ -1,16 +1,16 @@
 Framework grant simple access to PaloAlto devices Rest API and Xml API via Python objects.
 
-Device/Panorama config template:
-ApiKey: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
-    or
+Device config template:
 Login: admin
 Password: password
-
 ApiVersion: 10.0
 RequestsDelaySeconds: 1
 
-You also can create a dict with keys defined abowe and pass in into config_file_full_name on device __init__()
-
+Panorama config template:
+ApiKey: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+ApiVersion: 10.1
+IPv4: 10.10.10.10
+RequestsDelaySeconds: 1
 
 Code examples:
 Create an addresses and address group:
@@ -29,20 +29,16 @@ _ip_element_3 = XmlApiElementsBuilder.get_ip_address_xml('10.10.10.4-31', '10.10
 _elements = [_ip_element_1, _ip_element_2, _ip_element_3]
 _dg_1 = XmlApiElementsBuilder.get_device_group_xml('Test_DG_1', _elements)
 
-_xml, _code = _panorama.xml_api_config_request(
-            XmlApiConfigAction.set,
-            f'{PathBuilder.config_this_device()}{PathBuilder.device_group("PA-VM")}{PathBuilder.address()}',
-            _elements
-        )
+_xml, _code = _panorama.xml_api_config_request(XmlApiConfigAction.set,
+                                               f'{PathBuilder.config_this_device()}{PathBuilder.device_group("PA-VM")}{PathBuilder.address()}',
+                                               _elements)
 
 print('Reply:')
 print(ET.dump(_xml), _code)
 
-_xml, _code = _panorama.xml_api_config_request(
-            XmlApiConfigAction.set,
-            f'{PathBuilder.config_this_device()}{PathBuilder.device_group("PA-VM")}{PathBuilder.address_group()}',
-            [_dg_1]
-        )
+_xml, _code = _panorama.xml_api_config_request(XmlApiConfigAction.set,
+                                               f'{PathBuilder.config_this_device()}{PathBuilder.device_group("PA-VM")}{PathBuilder.address_group()}',
+                                               [_dg_1])
 
 print('Reply:')
 print(ET.dump(_xml), _code)
